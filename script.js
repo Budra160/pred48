@@ -30,3 +30,7 @@ function prikaziProizvode() {
     ? proizvodi.map((proizvod) => KarticaProizvoda(proizvod, true)).join("")
     : "Nema proizvoda za prikaz.";
 }
+
+funct prikaziProiz(){
+  console.log("yaya")
+}
