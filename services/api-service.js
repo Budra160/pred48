@@ -1,11 +1,11 @@
-const apiEndpont = "https://dummyjson.com/products"
+const apiEndpont = "https://dummyjson.com/products";
 
 export async function dohvatiProizvode() {
-    const response = await fetch(`${apiEndpont}/category/groceries`)
+  const response = await fetch(`${apiEndpont}/category/groceries`);
 
-    if (!response.ok) {
-        throw new Error()
-    }
+  if (!response.ok) {
+    throw new Error();
+  }
 
-    return (await response.json()).products
+  return (await response.json()).products;
 }

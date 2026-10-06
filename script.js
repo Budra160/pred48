@@ -9,23 +9,24 @@ main.innerHTML = `
     ${Sekcija("Košarica", `<div id='kosarica' class='kartice'></div>`)}
 `;
 
-
-const ponuda = document.querySelector("#ponuda")
-let proizvodi = []
+const ponuda = document.querySelector("#ponuda");
+let proizvodi = [];
 
 async function ucitajProizvode() {
-   ponuda.textContent = "Ucitavanje proizvoda..."   
-   
-   try {
-    proizvodi = await dohvatiProizvode()
-    prikaziProizvode()
-   } catch {
-     ponuda.textContent = "Greska prilikom ucitavanja proizvoda."  
-   }
+  ponuda.textContent = "Ucitavanje proizvoda...";
+
+  try {
+    proizvodi = await dohvatiProizvode();
+    prikaziProizvode();
+  } catch {
+    ponuda.textContent = "Greska prilikom ucitavanja proizvoda.";
+  }
 }
 
-ucitajProizvode()
+ucitajProizvode();
 
 function prikaziProizvode() {
-    ponuda.innerHTML = proizvodi.length ? proizvodi.map((proizvod) => KarticaProizvoda(proizvod, true)).join("") : "Nema proizvoda za prikaz."
+  ponuda.innerHTML = proizvodi.length
+    ? proizvodi.map((proizvod) => KarticaProizvoda(proizvod, true)).join("")
+    : "Nema proizvoda za prikaz.";
 }
