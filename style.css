@@ -218,3 +218,19 @@ footer {
     gap: 8px;
   }
 }
+
+.kosarica{
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.item-wrapper{
+  display: flex;
+  gap:.75rem;
+  align-items: center;
+}
+
+.item-wrapper p{
+  margin: 0;
+}
