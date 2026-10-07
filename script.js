@@ -50,20 +50,29 @@ ponuda.addEventListener("click", (e) => {
     (item) => item.id === Number(gumb.dataset.idProizvoda),
   );
 
-  if (!gumb)
-    alert("Nešto je pošlo po zlu sa dodavanjem/makivanjem iz kosarice.");
+  if (!gumb) alert("Nešto je pošlo po zlu");
 
   if (gumb.dataset.id === "dodaj") {
     if (!proizvod.kosarica) addProperty(proizvod);
 
     if (!kosarica.includes(proizvod)) {
+      kosaricaPrice +=
+        Math.round(proizvod.kolicina * proizvod.price * 100) / 100;
       kosarica.push(proizvod);
+      refreshKosarica(kosarica);
       kosarica.forEach(
-        (item) => (kosaricaWrapper.innerHTML += kosaricaProizvod(item)),
+        (element) =>
+          (kosaricaPrice +=
+            Math.round(element.price * element.kolicina * 100) / 100),
       );
-      gumb.dataset.id = "ukloni";
+      kosaricaWrapper.innerHTML += `
+      <p>Ukupna cijena: <b = "cijena">${kosaricaPrice} USD</b></p>
+      `;
       ponuda.innerHTML = "";
       prikaziProizvode();
+    } else if (kosarica.includes(proizvod)) {
+      ponuda.innerHTML = "";
+      deleteKosarica(gumb.dataset.idProizvoda);
     }
   } else {
     return;
@@ -73,7 +82,10 @@ ponuda.addEventListener("click", (e) => {
 function addProperty(proizvod) {
   proizvod["kolicina"] = 1;
 }
-
+let kosaricaPrice = 0;
+kosaricaWrapper.innerHTML += `
+    <p>Ukupna cijena: <b = "cijena">${kosaricaPrice} USD</b></p>
+  `;
 kosaricaWrapper.addEventListener("click", (e) => {
   e.preventDefault();
   if (!e.target.closest(".gumb")) return;
@@ -81,22 +93,26 @@ kosaricaWrapper.addEventListener("click", (e) => {
   const button = e.target.closest(".gumb");
   let idGumb = Number(button.dataset.idProizvoda);
   let proizvod = proizvodi.find((item) => item.id === idGumb);
-  let item = e.target.closest(".item-wrapper");
-  console.log(proizvod.kolicina, item);
 
   if (!button) alert("Nema gumba");
 
-  if (idGumb === "smanji") {
-    if (idGumb === proizvod.id) {
-      if (proizvod.kolicina == 1) {
-        kosarica = kosarica.filter((item) => item.id !== idGumb);
-        console.log(kosarica);
-        refreshKosarica(kosarica);
-      } else proizvod.kolicina = proizvod.kolicina - 1;
-
-      console.log(proizvod);
-    }
+  if (button.dataset.id === "smanji" && idGumb === proizvod.id) {
+    if (proizvod.kolicina == 1) {
+      deleteKosarica(button.dataset.idProizvoda);
+    } else proizvod.kolicina = proizvod.kolicina - 1;
+  } else if (button.dataset.id === "povecaj" && idGumb === proizvod.id) {
+    proizvod.kolicina = proizvod.kolicina + 1;
   }
+
+  refreshKosarica(kosarica);
+  kosarica.forEach(
+    (element) =>
+      (kosaricaPrice +=
+        Math.round(element.price * element.kolicina * 100) / 100),
+  );
+  kosaricaWrapper.innerHTML += `
+      <p>Ukupna cijena: <b = "cijena">${kosaricaPrice} USD</b></p>
+      `;
 });
 
 function refreshKosarica(array) {
@@ -104,4 +120,10 @@ function refreshKosarica(array) {
   array.forEach(
     (item) => (kosaricaWrapper.innerHTML += kosaricaProizvod(item)),
   );
+}
+
+function deleteKosarica(elementId) {
+  kosarica = kosarica.filter((item) => item.id !== Number(elementId));
+  refreshKosarica(kosarica);
+  prikaziProizvode();
 }
